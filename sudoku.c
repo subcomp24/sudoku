@@ -14,9 +14,17 @@ int puzzle[9][9] = {
 
 void printPuzzle(int puzzle[9][9]);
 int validMove(int puzzle[9][9],int row, int column, int number);
+int solvePuzzle(int puzzle[9][9],int row, int column);
 
 int main (){
     printPuzzle(puzzle);
+    if(solvePuzzle(puzzle,0,0)){
+        printf("Solution found :\n");
+        printPuzzle(puzzle);
+    } else {
+        printf("No solution exists.\n");
+    }
+
 
     return 0;
 
@@ -52,6 +60,31 @@ int validMove(int puzzle[9][9],int row,int column,int number){
     }
 
     return 1;
+}
+
+int solvePuzzle(int puzzle[9][9],int row,int column){
+    if(column==9){
+        if(row==8){
+            return 1;
+        }
+        column=0;
+        row++;
+    }
+
+    if(puzzle[row][column]>0 && puzzle[row][column]!=". "){
+        return solvePuzzle(puzzle,row,column+1);
+    }
+
+    for(int i=1;i<=9;i++){
+        if(validMove(puzzle,row,column,i)){
+            puzzle[row][column]=i;
+            if(solvePuzzle(puzzle,row,column+1)){
+                return 1;
+            }
+            puzzle[row][column]=0;
+        }
+    }
+    return 0;
 }
 
 void printPuzzle(int puzzle[9][9]){
